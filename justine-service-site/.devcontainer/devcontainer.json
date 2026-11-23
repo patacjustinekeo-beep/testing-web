@@ -1,0 +1,10 @@
+{
+  "name": "Justine Service Site",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "Website", "onAutoForward": "openBrowser" }
+  },
+  "postCreateCommand": "npm install",
+  "postAttachCommand": "npm run dev"
+}

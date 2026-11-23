@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="y9AYUPaapPeagQZuPfTuAtWjoP1F9USOz8T7rLu_8Go" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webbins | Website Developer Service</title>
+  <meta name="description" content="Webbins is a website developer service for restaurants and businesses." />
+  <meta name="theme-color" content="#1f7083" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%237c5cff'/%3E%3Cpath d='M14 20l8 24 10-16 10 16 8-24' fill='none' stroke='white' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <script>
+    // Low-end device check: the same animations run, but with cheaper blur and smaller glow layers
+    (function () {
+      var weak = (navigator.hardwareConcurrency || 4) <= 4 || (navigator.deviceMemory || 4) <= 4 || window.matchMedia('(max-width:760px)').matches;
+      if (weak) document.documentElement.className += ' lite';
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Webbins logo (reused everywhere, unchanged) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#8b6bff"/><stop offset=".55" stop-color="#22d3ee"/><stop offset="1" stop-color="#7cffb2"/>
+      </linearGradient>
+    </defs>
+    <symbol id="logo" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#lg)"/>
+      <rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+      <path d="M14 21l8 23 10-16 10 16 8-23" fill="none" stroke="#06112b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="50" cy="15" r="4" fill="#fff"/>
+    </symbol>
+  </svg>
+
+  <div class="boot" id="boot"><svg class="boot-logo"><use href="#logo"/></svg></div>
+
+  <div class="bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+  <div id="glow" aria-hidden="true"></div>
+
+  <!-- top bar -->
+  <header class="topbar glass frost">
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" hidden>
+      <span class="bars"><i></i><i></i><i></i></span><b>Menu</b>
+    </button>
+    <a class="brand" href="#/home" id="brandLink"><svg><use href="#logo"/></svg><span>Webbins</span></a>
+    <nav class="sec-nav" id="secNav" aria-label="Quick links" hidden></nav>
+    <div class="top-right" id="topRight"></div>
+  </header>
+
+  <!-- page menu (only after login) -->
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer glass frost" id="drawer" aria-label="Menu">
+    <div class="drawer-head">
+      <a class="brand" href="#/app"><svg><use href="#logo"/></svg><span>Webbins</span></a>
+      <button class="icon-btn" id="drawerClose" aria-label="Close menu">×</button>
+    </div>
+    <div class="drawer-user" id="drawerUser"></div>
+    <nav id="drawerNav"></nav>
+    <button class="btn wide" id="drawerLogout">Log out</button>
+  </aside>
+
+  <div id="verifyBanner" class="banner glass frost" hidden>
+    <span>Verify your email to unlock the owner dashboard. Check your inbox.</span>
+    <button class="btn small" id="resendVerify">Resend email</button>
+    <button class="btn small primary" id="checkVerify">I verified</button>
+  </div>
+
+  <main id="app">
+
+    <!-- ============ HOME ============ -->
+    <section class="view home" id="v-home">
+      <div class="home-inner">
+        <div class="logo-wrap">
+          <span class="ring r1"></span><span class="ring r2"></span>
+          <svg class="logo-big"><use href="#logo"/></svg>
+        </div>
+        <h1 class="wordmark" id="heroWord" aria-label="Webbins">Webbins</h1>
+        <p class="pill frost"><i class="dot"></i> Website Developer Service</p>
+        <p class="home-line">Beautiful, fast websites for restaurants and businesses, built from first sketch to launch.</p>
+        <button class="btn primary big glowbtn" id="getStarted">Get started <span class="arrow">→</span></button>
+        <p class="home-note">Create a free account to see my works, packages and reviews, and to chat with me.</p>
+        <ul class="home-trust">
+          <li>You review it before you pay</li>
+          <li>You own your website</li>
+          <li>Private chat with the developer</li>
+        </ul>
+        <div class="floaters" aria-hidden="true">
+          <span class="float f1 glass">Restaurant websites</span>
+          <span class="float f2 glass">Business websites</span>
+          <span class="float f3 glass">Web apps</span>
+          <span class="float f4 glass">Clean code</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AUTH ============ -->
+    <section class="view" id="v-auth">
+      <div class="auth-card glass frost">
+        <svg class="auth-logo"><use href="#logo"/></svg>
+        <h2 id="authTitle">Welcome to Webbins</h2>
+        <p class="sub" id="authNote">Log in or create an account to continue.</p>
+        <div class="tabs" id="authTabs">
+          <button class="tab active" data-mode="login">Log in</button>
+          <button class="tab" data-mode="signup">Sign up</button>
+        </div>
+        <form id="authForm" novalidate>
+          <label class="field" id="nickField" hidden><span>Nickname</span><input id="authNick" type="text" maxlength="24" autocomplete="nickname" placeholder="What should I call you?" /></label>
+          <div class="field" id="countryField" hidden><span>Country</span><div id="countryPicker"></div></div>
+          <label class="field" id="emailField"><span>Email</span><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" /></label>
+          <label class="field" id="passField"><span>Password</span><input id="authPass" type="password" autocomplete="current-password" placeholder="At least 6 characters" /></label>
+          <p class="err" id="authErr" role="alert"></p>
+          <button class="btn primary wide" id="authSubmit">Log in</button>
+          <button type="button" class="link" id="forgot">Forgot password?</button>
+        </form>
+        <div id="googleBox">
+          <div class="or"><span>or</span></div>
+          <button class="btn wide" id="googleBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg> Continue with Google</button>
+        </div>
+        <button class="link" id="authBack">← Back to home</button>
+      </div>
+    </section>
+
+    <!-- ============ FULL CONTENT (after login): one page, scroll down ============ -->
+    <div class="view" id="v-app">
+
+      <!-- CUSTOMER DASHBOARD -->
+      <section class="sec first only-customer" id="sec-dashboard">
+        <div class="hello glass">
+          <div class="avatar big" id="cdAvatar"></div>
+          <div class="w-text"><p class="eyebrow">Your dashboard</p><h2 id="cdHello">Hi!</h2><p id="cdWhere"></p></div>
+          <button class="btn primary" data-chat="">Chat with me</button>
+        </div>
+
+        <div class="status-card glass" id="statusCard"></div>
+        <div class="tracker glass" id="tracker"></div>
+
+        <div class="dash-grid">
+          <div class="chat-card glass" id="chatCard">
+            <header class="chat-head">
+              <div class="avatar" id="cdOwnerAvatar"></div>
+              <div><strong>Chat with Webbins</strong><small><i class="dot"></i> Private chat. Only you and the owner can read it.</small></div>
+            </header>
+            <div class="msgs" id="dashMsgs"></div>
+            <form class="composer" id="dashForm" autocomplete="off">
+              <div class="preview" hidden></div>
+              <label class="attach" title="Send a photo" aria-label="Attach a photo"><input class="c-file" type="file" accept="image/*" hidden /><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></label>
+              <input class="c-text" type="text" maxlength="1000" placeholder="Type your message to me..." />
+              <button class="send" aria-label="Send message"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+            </form>
+          </div>
+
+          <div class="side-cards">
+            <h3>What would you like to do?</h3>
+            <button class="action glass" data-chat="Hi! I want to discuss what I want to create."><strong>Discuss your project</strong><small>Tell me about the website you want</small></button>
+            <button class="action glass" data-chat="Hi! I would like to ask about the payment method."><strong>Talk to me about payment</strong><small>I will tell you the payment method</small></button>
+            <button class="action glass" data-sec="sec-rates"><strong>See packages and prices</strong><small>Pages, details and starting prices</small></button>
+            <button class="action glass" data-sec="sec-process"><strong>Read how we work</strong><small>The steps and important reminders</small></button>
+            <button class="action glass" id="fbAction" data-sec="sec-reviews"><strong>Leave feedback</strong><small id="fbActionText"></small></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- OWNER DASHBOARD -->
+      <section class="sec first only-owner" id="sec-owner">
+        <div class="sec-head"><h2>Owner dashboard</h2><p class="sub">See every customer who logs in, reply to them and keep their work organized.</p></div>
+        <ol class="howto glass">
+          <li><b>Pick a customer</b> from the list.</li>
+          <li><b>Read and reply</b> in the chat. Photos are shown too.</li>
+          <li><b>Set their status</b> so the work stays organized.</li>
+          <li><b>Press Allow feedback</b> when you want them to review you.</li>
+        </ol>
+        <div class="stat-groups">
+          <div><h4>Needs you</h4><div class="stat-cards" id="statAttn"></div></div>
+          <div><h4>By place</h4><div class="stat-cards" id="statPlace"></div></div>
+          <div><h4>By work status</h4><div class="stat-cards" id="statWork"></div></div>
+        </div>
+        <div class="owner-grid glass" id="ownerGrid">
+          <aside class="o-side">
+            <p class="mini-label">Place</p>
+            <div class="seg" id="regionSeg">
+              <button class="active" data-region="all">All</button>
+              <button data-region="local">Local (Philippines)</button>
+              <button data-region="intl">International</button>
+            </div>
+            <p class="mini-label">Work status</p>
+            <div class="status-tabs" id="statusTabs"></div>
+            <input class="search" id="custSearch" type="search" placeholder="Search nickname, country or email" />
+            <div class="filter-summary" id="filterSummary"></div>
+            <ul class="cust-list" id="custList"></ul>
+          </aside>
+          <div class="o-main">
+            <div class="o-empty" id="dashEmpty"><strong>No customer selected</strong><p>Pick a customer on the left to read their messages, set their status and reply.</p></div>
+            <div class="o-chat" id="ownerChat" hidden>
+              <header class="chat-head">
+                <button class="icon-btn back" id="ownerBack" aria-label="Back to customers">←</button>
+                <div class="avatar" id="oAvatar"></div>
+                <div><strong id="oName"></strong><small id="oMeta"></small></div>
+              </header>
+              <div class="o-controls" id="oControls"></div>
+              <div class="msgs" id="ownerMsgs"></div>
+              <form class="composer" id="ownerForm" autocomplete="off">
+                <div class="preview" hidden></div>
+                <label class="attach" title="Send a photo" aria-label="Attach a photo"><input class="c-file" type="file" accept="image/*" hidden /><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></label>
+                <input class="c-text" type="text" maxlength="1000" placeholder="Write a reply..." />
+                <button class="send" aria-label="Send reply"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEET ME -->
+      <section class="sec lazy" id="sec-about">
+        <div class="sec-head"><h2>Meet me</h2><p class="sub">Who I am and what I can do for you.</p></div>
+        <div class="about-grid">
+          <div class="about-photo reveal" id="aboutPhoto"></div>
+          <div class="glass pad reveal" id="aboutText"></div>
+        </div>
+        <h3 class="block-title">What I do</h3>
+        <div class="services" id="services"></div>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="sec lazy" id="sec-skills">
+        <div class="sec-head"><h2>My skills</h2><p class="sub">What I use to build your website.</p></div>
+        <div class="skills-grid">
+          <div class="glass pad reveal" id="skillBars"></div>
+          <div class="glass pad reveal"><h3>Tools I use</h3><div class="chips" id="tools"></div></div>
+        </div>
+      </section>
+
+      <!-- WORKS -->
+      <section class="sec lazy" id="sec-works">
+        <div class="sec-head"><h2>My works</h2><p class="sub">Photos of websites I made. Tap a photo to see it bigger.</p></div>
+        <div class="filters" id="filters"></div>
+        <div class="gallery" id="gallery"></div>
+      </section>
+
+      <!-- RATES -->
+      <section class="sec lazy" id="sec-rates">
+        <div class="sec-head"><h2>Rates and packages</h2><p class="sub" id="packNote"></p></div>
+        <div class="packs" id="packs"></div>
+        <div class="discuss glass reveal">
+          <div><h3>Not sure which package you need?</h3><p>Tell me what you want to create. I will listen and suggest the best package for you.</p></div>
+          <button class="btn primary" data-chat="Hi! I want to discuss what I want to create.">Discuss what you want to create</button>
+        </div>
+        <div class="glass pad rating-box reveal" id="ratingBox"></div>
+      </section>
+
+      <!-- PROCESS -->
+      <section class="sec lazy" id="sec-process">
+        <div class="sec-head"><h2>How we work together</h2><p class="sub">Simple steps from your idea to your finished website. Please read the reminders below.</p></div>
+        <div class="steps-grid" id="processSteps"></div>
+        <div class="reminders" id="reminders"></div>
+      </section>
+
+      <!-- REVIEWS -->
+      <section class="sec lazy" id="sec-reviews">
+        <div class="sec-head"><h2>Reviews from customers</h2><p class="sub">Real feedback from people I built websites for.</p></div>
+        <div class="stat-cards" id="clientStats"></div>
+        <div class="fb-layout">
+          <div class="fb-wall" id="fbWall"></div>
+          <div class="glass pad fb-form-card" id="fbFormCard"></div>
+        </div>
+      </section>
+
+      <!-- BACKGROUND + CAREER -->
+      <section class="sec lazy" id="sec-career">
+        <div class="sec-head"><h2>Background and career</h2><p class="sub">Where I started and where I am now.</p></div>
+        <div class="two-col">
+          <div>
+            <h3 class="block-title first">My background</h3>
+            <div class="slot-wrap reveal" id="bgPhoto"></div>
+            <div class="timeline" id="bgTimeline"></div>
+          </div>
+          <div>
+            <h3 class="block-title first">About my career</h3>
+            <div class="slot-wrap reveal" id="careerPhoto"></div>
+            <div class="timeline" id="careerTimeline"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAYMENT -->
+      <section class="sec lazy" id="sec-payment">
+        <div class="sec-head"><h2>Payment</h2><p class="sub">Talk to me directly about how to pay.</p></div>
+        <div class="pay-card glass pad reveal" id="payCard"></div>
+      </section>
+
+      <!-- LICENSE AND TRUST -->
+      <section class="sec lazy" id="sec-trust">
+        <div class="sec-head"><h2>License and trust</h2><p class="sub" id="trustIntro"></p></div>
+        <div class="trust-top">
+          <div class="license-photo reveal" id="licenseSlot"></div>
+          <div class="glass pad reveal" id="licenseInfo"></div>
+        </div>
+        <h3 class="block-title">My promise: 100% trustworthy</h3>
+        <div class="pledges" id="pledges"></div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="sec lazy" id="sec-contact">
+        <div class="sec-head"><h2>Contact me</h2><p class="sub">The fastest way is the chat on your dashboard. You can also reach me here.</p></div>
+        <div class="contact-grid" id="contacts"></div>
+        <div class="discuss glass reveal">
+          <div><h3>Ready to start?</h3><p>Send me a message and tell me about your website.</p></div>
+          <button class="btn primary" data-chat="Hi! I would like to start a project with you.">Chat with me</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer"><span id="footText"></span></footer>
+
+  <!-- floating chat button (customers) -->
+  <button class="fab" id="chatFab" aria-label="Open chat" hidden>
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+    <span class="fab-label">Chat with me</span>
+    <span class="badge" id="fabBadge" hidden>0</span>
+  </button>
+
+  <section class="chat glass frost" id="chatPanel" aria-label="Chat with the owner">
+    <header class="chat-head">
+      <div class="avatar" id="panelAvatar"></div>
+      <div><strong>Chat with Webbins</strong><small><i class="dot"></i> I reply as soon as I can</small></div>
+      <button class="icon-btn" id="chatClose" aria-label="Close chat">×</button>
+    </header>
+    <div class="msgs" id="panelMsgs"></div>
+    <form class="composer" id="panelForm" autocomplete="off">
+      <div class="preview" hidden></div>
+      <label class="attach" title="Send a photo" aria-label="Attach a photo"><input class="c-file" type="file" accept="image/*" hidden /><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></label>
+      <input class="c-text" type="text" maxlength="1000" placeholder="Type your message..." />
+      <button class="send" aria-label="Send message"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+    </form>
+  </section>
+
+  <!-- photo viewer (works + chat photos) -->
+  <div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Photo">
+    <div class="lightbox">
+      <button class="icon-btn modal-x" data-close aria-label="Close">×</button>
+      <img id="lbImg" alt="" />
+      <p id="lbCap"></p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Owner account email (same as OWNER.email in src/config.js). Lowercase.
+    function ownerEmail() {
+      return 'patacjustinekeo@gmail.com';
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    // Owner = signed in with the owner email AND that email is verified
+    // (Google sign-in is verified automatically)
+    function isOwner() {
+      return isSignedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email.lower() == ownerEmail().lower()
+        && request.auth.token.email_verified == true;
+    }
+
+    function userKeys() {
+      return ['uid', 'email', 'photo', 'nickname', 'country', 'countryCode', 'status',
+              'feedbackAllowed', 'createdAt', 'lastMessage', 'lastMessageAt', 'unreadOwner', 'unreadCustomer'];
+    }
+    // Fields a customer may change on their own profile. They can NOT change
+    // status or feedbackAllowed: only the owner can.
+    function selfEditable() {
+      return ['nickname', 'country', 'countryCode', 'photo', 'lastMessage', 'lastMessageAt', 'unreadOwner', 'unreadCustomer'];
+    }
+
+    // One document per customer. Their private messages live inside it.
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isOwner();
+
+      allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(userKeys())
+        && request.resource.data.status == 'inquiry'
+        && request.resource.data.feedbackAllowed == false;
+
+      allow update: if isOwner()
+        || (isSelf(uid)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(selfEditable()));
+
+      allow delete: if false;
+
+      // A message is text, a small compressed photo (image), or both.
+      match /messages/{mid} {
+        allow read: if isSelf(uid) || isOwner();
+
+        allow create: if request.resource.data.keys().hasOnly(['text', 'sender', 'createdAt', 'image'])
+          && request.resource.data.text is string
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.get('image', '') is string
+          && request.resource.data.get('image', '').size() <= 450000
+          && (request.resource.data.text.size() > 0 || request.resource.data.get('image', '').size() > 0)
+          && request.resource.data.createdAt == request.time
+          && (
+            (isSelf(uid) && request.resource.data.sender == 'customer') ||
+            (isOwner()   && request.resource.data.sender == 'owner')
+          );
+
+        allow update, delete: if false;
+      }
+    }
+
+    // Feedback: any logged-in customer can read it, but a customer can only
+    // write theirs after the owner pressed "Allow feedback" for them.
+    match /feedback/{uid} {
+      allow read: if isSignedIn();
+
+      allow create, update: if isSelf(uid)
+        && get(/databases/$(database)/documents/users/$(uid)).data.feedbackAllowed == true
+        && request.resource.data.keys().hasOnly(['uid', 'nickname', 'country', 'countryCode', 'rating', 'text', 'createdAt'])
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 500
+        && request.resource.data.createdAt == request.time;
+
+      allow delete: if isOwner();
+    }
+  }
+}
